@@ -7,7 +7,9 @@ const App = () => {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState("");
 
-  const searchMovie = () => {
+  const searchMovie = (e) => {
+    e.preventDefault(); // IMPORTANT for form
+
     if (!query.trim()) return;
 
     setError("");
@@ -32,35 +34,37 @@ const App = () => {
       {/* REQUIRED HEADING */}
       <h1 id="heading">Search Movie</h1>
 
-      {/* Search Bar */}
-      <input
-        id="search-input"
-        type="text"
-        placeholder="Search Movie"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
+      {/* ✅ FORM IS REQUIRED */}
+      <form onSubmit={searchMovie}>
+        <input
+          id="search-input"
+          type="text"
+          placeholder="Search Movie"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
 
-      <button id="search-button" onClick={searchMovie}>
-        Search
-      </button>
+        <button id="search-button" type="submit">
+          Search
+        </button>
+      </form>
 
       {/* Error Message */}
       {error && <p className="error">{error}</p>}
 
-      {/* Movie Results */}
-      <div id="movie-list">
+      {/* ✅ RESULTS MUST BE IN ul > li */}
+      <ul id="movie-list">
         {movies.map((movie) => (
-          <div key={movie.imdbID} className="movie-card">
+          <li key={movie.imdbID}>
             <img
               src={movie.Poster !== "N/A" ? movie.Poster : ""}
               alt={movie.Title}
             />
-            <h3>{movie.Title}</h3>
+            <p>{movie.Title}</p>
             <p>{movie.Year}</p>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 };
