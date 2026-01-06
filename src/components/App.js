@@ -7,34 +7,32 @@ const App = () => {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState("");
 
-  const searchMovie = async () => {
+  const searchMovie = () => {
     if (!query.trim()) return;
 
     setError("");
     setMovies([]);
 
-    try {
-      const response = await fetch(
-        `https://www.omdbapi.com/?apikey=99eb9fd1&s=${query}`
-      );
-      const data = await response.json();
-
-      if (data.Response === "False") {
+    fetch(`https://www.omdbapi.com/?apikey=99eb9fd1&s=${query}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.Response === "False") {
+          setError("Invalid movie name. Please try again.");
+        } else {
+          setMovies(data.Search);
+        }
+      })
+      .catch(() => {
         setError("Invalid movie name. Please try again.");
-      } else {
-        setMovies(data.Search);
-      }
-    } catch (err) {
-      setError("Invalid movie name. Please try again.");
-    }
+      });
   };
 
   return (
     <div id="main">
-      {/* ✅ REQUIRED HEADING */}
+      {/* REQUIRED HEADING */}
       <h1 id="heading">Search Movie</h1>
 
-      {/* Search Input */}
+      {/* Search Bar */}
       <input
         id="search-input"
         type="text"
